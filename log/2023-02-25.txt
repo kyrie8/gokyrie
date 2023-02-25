@@ -1,0 +1,8 @@
+{"level":"ERROR","time":"2023-02-25 15:15:21","msg":"start server Error: listen tcp :8080: bind: address already in use"}
+{"level":"INFO","time":"2023-02-25 15:15:57","msg":"stop server success"}
+{"level":"INFO","time":"2023-02-25 15:23:46","msg":"stop server success"}
+{"level":"INFO","time":"2023-02-25 15:49:49","msg":"stop server success"}
+{"level":"INFO","time":"2023-02-25 15:50:18","caller":"router/router.go:79","msg":"stop server success"}
+{"level":"INFO","time":"2023-02-25 17:26:54","path":"router/router.go:79","msg":"stop server success"}
+{"level":"INFO","time":"2023-02-25 18:11:57","path":"router/router.go:79","msg":"stop server success"}
+{"level":"ERROR","time":"2023-02-25 18:12:01","path":"cmd/cmd.go:31","msg":"dial tcp: address 42.193.137.216: missing port in address"}
