@@ -11,6 +11,7 @@ import (
 
 	_ "gokyrie/docs"
 	"gokyrie/global"
+	"gokyrie/middleware"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -41,6 +42,7 @@ func InitRouter() {
 	r := gin.New()
 	//docs.SwaggerInfo.BasePath = "/api/v1"
 	r.Use(gin.Recovery())
+	r.Use(middleware.Cors())
 	rgPublic := r.Group("/api/v1/public")
 	rgAuth := r.Group("/api/v1")
 
