@@ -1,3 +1,14 @@
+definitions:
+  dto.UserLoginDTO:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+    required:
+    - name
+    - password
+    type: object
 info:
   contact: {}
   description: 接口描述
@@ -10,26 +21,14 @@ paths:
       - application/json
       description: 用户登录描述
       parameters:
-      - description: 用户名
-        in: formData
-        name: name
+      - description: body
+        in: body
+        name: body
         required: true
-        type: string
-      - description: 密码
-        in: formData
-        name: password
-        required: true
-        type: string
+        schema:
+          $ref: '#/definitions/dto.UserLoginDTO'
       produces:
       - application/json
-      responses:
-        "200":
-          description: 登录成功
-          schema:
-            type: string
-        "401":
-          description: 登录失败
-          schema:
-            type: string
+      responses: {}
       summary: 用户登录
 swagger: "2.0"

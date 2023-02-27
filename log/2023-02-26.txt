@@ -42,3 +42,4 @@
 {"level":"INFO","time":"2023-02-26 17:17:59","path":"router/router.go:84","msg":"stop server success"}
 {"level":"INFO","time":"2023-02-26 17:19:40","path":"router/router.go:84","msg":"stop server success"}
 {"level":"INFO","time":"2023-02-26 17:27:21","path":"router/router.go:84","msg":"stop server success"}
+{"level":"INFO","time":"2023-02-26 17:50:38","path":"router/router.go:86","msg":"stop server success"}

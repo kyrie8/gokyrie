@@ -27,33 +27,32 @@ const docTemplate = `{
                 "summary": "用户登录",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "用户名",
-                        "name": "name",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "密码",
-                        "name": "password",
-                        "in": "formData",
-                        "required": true
+                        "description": "body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserLoginDTO"
+                        }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "登录成功",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "登录失败",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
+                "responses": {}
+            }
+        }
+    },
+    "definitions": {
+        "dto.UserLoginDTO": {
+            "type": "object",
+            "required": [
+                "name",
+                "password"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
                 }
             }
         }

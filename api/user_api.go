@@ -25,10 +25,7 @@ func NewUserApi() UserApi {
 // @Description 用户登录描述
 // @Accept       application/json
 // @Produce      application/json
-// @Param name formData string true "用户名"
-// @Param password formData string true "密码"
-// @Success 200 {string} string "登录成功"
-// @Failure 401 {string} string "登录失败"
+// @Param body body dto.UserLoginDTO true "body"
 // @Router /api/v1/public/user/login [post]
 func (u UserApi) Login(c *gin.Context) {
 	var iUserLoginDTO dto.UserLoginDTO
