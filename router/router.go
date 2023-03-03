@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os/signal"
-	"strings"
+	"regexp"
 	"syscall"
 	"time"
 
@@ -15,7 +15,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 	"github.com/spf13/viper"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -46,9 +46,9 @@ func InitRouter() {
 	rgPublic := r.Group("/api/v1/public")
 	rgAuth := r.Group("/api/v1")
 
-	initBAsePlatformRoutes()
-
 	registerCustomValidation()
+
+	initBAsePlatformRoutes()
 
 	for _, fnRegistRoute := range gfnRouter {
 		fnRegistRoute(rgPublic, rgAuth)
@@ -94,12 +94,15 @@ func initBAsePlatformRoutes() {
 // 自定义验证器
 func registerCustomValidation() {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		v.RegisterValidation("first_is_a", func(fl validator.FieldLevel) bool {
-			value, _ := fl.Field().Interface().(string)
-			if value != "" && strings.Index(value, "a") == 0 {
-				return true
-			}
-			return false
-		})
+		v.RegisterValidation("mobile", ValidateMobile)
 	}
+}
+
+func ValidateMobile(fl validator.FieldLevel) bool {
+	mobile := fl.Field().Interface().(string)
+	// 使用正则表达式判断mobile是否合法
+	//pattern := "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$"
+	pattern := `^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$`
+	ok, _ := regexp.MatchString(pattern, mobile)
+	return ok
 }

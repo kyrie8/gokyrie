@@ -12,6 +12,7 @@ type ResponseJson struct {
 	Code   int         `json:"code,omitempty"`
 	Msg    string      `json:"msg,omitempty"`
 	Data   interface{} `json:"data,omitempty"`
+	Total  int64       `json:"total,omitempty"`
 }
 
 func (m ResponseJson) IsEmpty() bool {

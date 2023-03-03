@@ -16,9 +16,10 @@ func InitUserRoutes() {
 
 		rgAuthUser := rgAuth.Group("user")
 		{
-			rgAuthUser.GET("", func(ctx *gin.Context) {
-
-			})
+			rgAuthUser.POST("", userApi.AddUser)
+			rgAuthUser.GET("/list", userApi.GetUserList)
+			rgAuthUser.GET("/:id", userApi.GetUserById)
+			rgAuthUser.PUT("/:id", userApi.UpdateUser)
 		}
 	})
 }

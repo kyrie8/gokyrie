@@ -2,8 +2,5 @@
   "go.toolsEnvVars": {
     "GOPATH": "/Users/kyrie/go"
   },
-  "cSpell.words": [
-    "Syncer",
-    "zapcore"
-  ]
+  "cSpell.words": ["IDDTO", "Syncer", "zapcore"]
 }
