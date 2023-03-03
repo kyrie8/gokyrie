@@ -83,7 +83,7 @@ func (m UserApi) AddUser(c *gin.Context) {
 
 func (m UserApi) GetUserById(c *gin.Context) {
 	var iCommonIDDTO dto.CommonIDDTO
-	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iCommonIDDTO, BindParamsFromUri: true}).GetError(); err != nil {
+	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iCommonIDDTO, BindUri: true}).GetError(); err != nil {
 		return
 	}
 	iUser, err := m.Service.GetUserById(&iCommonIDDTO)
@@ -123,7 +123,7 @@ func (m UserApi) GetUserList(c *gin.Context) {
 
 func (m UserApi) UpdateUser(c *gin.Context) {
 	var iUserUpdateDTO dto.UserUpdateDTO
-	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iUserUpdateDTO}).GetError(); err != nil {
+	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iUserUpdateDTO, BindUri: true}).GetError(); err != nil {
 		return
 	}
 	err := m.Service.UpdateUser(&iUserUpdateDTO)

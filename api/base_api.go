@@ -24,19 +24,21 @@ func NewBaseApi() BaseApi {
 }
 
 type BuildRequestOption struct {
-	Ctx               *gin.Context
-	DTO               interface{}
-	BindParamsFromUri bool
+	Ctx     *gin.Context
+	DTO     interface{}
+	BindUri bool
+	BindAll bool
 }
 
 func (m *BaseApi) BuildRequest(option BuildRequestOption) *BaseApi {
 	var errResult error
 	m.Ctx = option.Ctx
 	if option.DTO != nil {
-		if option.BindParamsFromUri {
-			errResult = m.Ctx.ShouldBindUri(option.DTO)
-		} else {
-			errResult = m.Ctx.ShouldBind(option.DTO)
+		if option.BindAll || option.BindUri {
+			errResult = utils.AppendError(errResult, m.Ctx.ShouldBindUri(option.DTO))
+		}
+		if option.BindAll || !option.BindUri {
+			errResult = utils.AppendError(errResult, m.Ctx.ShouldBind(option.DTO))
 		}
 		if errResult != nil {
 			errResult = m.ParseValidateErrors(errResult, option.DTO)
