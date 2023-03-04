@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"gokyrie/conf"
 	"gokyrie/service"
 	"gokyrie/service/dto"
@@ -67,6 +68,12 @@ func (m UserApi) AddUser(c *gin.Context) {
 	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iUserAddDTO}).GetError(); err != nil {
 		return
 	}
+
+	file, _ := c.FormFile("file")
+	stFilePath := fmt.Sprintf("./upload/%s", file.Filename)
+	_ = c.SaveUploadedFile(file, stFilePath)
+	iUserAddDTO.Avatar = stFilePath
+
 	err := m.Service.AddUser(&iUserAddDTO)
 	if err != nil {
 		m.ServerFail(ResponseJson{
@@ -135,6 +142,24 @@ func (m UserApi) UpdateUser(c *gin.Context) {
 		return
 	}
 
+	m.OK(ResponseJson{
+		Code: conf.SUCCESS_CODE,
+	})
+}
+
+func (m UserApi) DeleteUserById(c *gin.Context) {
+	var iCommonIDDTO dto.CommonIDDTO
+	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: iCommonIDDTO, BindUri: true}).GetError(); err != nil {
+		return
+	}
+	err := m.Service.DeleteUserById(&iCommonIDDTO)
+	if err != nil {
+		m.ServerFail(ResponseJson{
+			Code: conf.FAIL_CODE,
+			Msg:  err.Error(),
+		})
+		return
+	}
 	m.OK(ResponseJson{
 		Code: conf.SUCCESS_CODE,
 	})
