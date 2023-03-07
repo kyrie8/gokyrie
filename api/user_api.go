@@ -68,13 +68,13 @@ func (m UserApi) AddUser(c *gin.Context) {
 	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iUserAddDTO}).GetError(); err != nil {
 		return
 	}
-
-	file, _ := c.FormFile("file")
-	stFilePath := fmt.Sprintf("./upload/%s", file.Filename)
-	_ = c.SaveUploadedFile(file, stFilePath)
-	iUserAddDTO.Avatar = stFilePath
-
-	err := m.Service.AddUser(&iUserAddDTO)
+	file, err := c.FormFile("file")
+	if err == nil {
+		stFilePath := fmt.Sprintf("./upload/%s", file.Filename)
+		_ = c.SaveUploadedFile(file, stFilePath)
+		iUserAddDTO.Avatar = stFilePath
+	}
+	err = m.Service.AddUser(&iUserAddDTO)
 	if err != nil {
 		m.ServerFail(ResponseJson{
 			Code: conf.FAIL_CODE,

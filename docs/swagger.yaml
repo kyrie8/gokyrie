@@ -1,4 +1,24 @@
 definitions:
+  dto.UserAddDTO:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      mobile:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      realName:
+        type: string
+    required:
+    - name
+    - password
+    type: object
   dto.UserLoginDTO:
     properties:
       name:
@@ -31,4 +51,20 @@ paths:
       - application/json
       responses: {}
       summary: 用户登录
+  /api/v1/user:
+    post:
+      consumes:
+      - application/json
+      description: 用户添加描述
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserAddDTO'
+      produces:
+      - application/json
+      responses: {}
+      summary: 用户添加
 swagger: "2.0"
