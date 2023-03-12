@@ -2,6 +2,7 @@ package dto
 
 import (
 	"gokyrie/model"
+	"gokyrie/utils"
 )
 
 type UserLoginDTO struct {
@@ -20,8 +21,9 @@ type UserAddDTO struct {
 }
 
 func (m *UserAddDTO) ConvertToModel(iUser *model.User) {
+	stHash, _ := utils.Encrypt(m.Password)
 	iUser.Email = m.Email
-	iUser.Password = m.Password
+	iUser.Password = stHash
 	iUser.Name = m.Name
 	iUser.RealName = m.RealName
 	iUser.Mobile = m.Mobile

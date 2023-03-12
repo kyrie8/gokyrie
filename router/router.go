@@ -45,6 +45,7 @@ func InitRouter() {
 	r.Use(middleware.Cors())
 	rgPublic := r.Group("/api/v1/public")
 	rgAuth := r.Group("/api/v1")
+	rgAuth.Use(middleware.Auth())
 
 	registerCustomValidation()
 

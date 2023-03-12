@@ -5,6 +5,7 @@ import (
 	"gokyrie/dao"
 	"gokyrie/model"
 	"gokyrie/service/dto"
+	"gokyrie/utils"
 )
 
 type UserService struct {
@@ -23,13 +24,20 @@ func NewUserService() *UserService {
 	return userService
 }
 
-func (m *UserService) Login(iUserDTO dto.UserLoginDTO) (model.User, error) {
+func (m *UserService) Login(iUserDTO dto.UserLoginDTO) (model.User, string, error) {
 	var errResult error
-	iUser := m.Dao.GetUserByNameAndPassword(iUserDTO.Name, iUserDTO.Password)
-	if iUser.ID == 0 {
+	var token string
+	// iUser := m.Dao.GetUserByNameAndPassword(iUserDTO.Name, iUserDTO.Password)
+	// if iUser.ID == 0 {
+	// 	errResult = errors.New("账号或者密码错误")
+	// }
+	iUser, err := m.Dao.GetUserByName(iUserDTO.Name)
+	if err != nil || utils.CompareHashAndPassword(iUser.Password, iUserDTO.Password) {
 		errResult = errors.New("账号或者密码错误")
+	} else {
+		token, _ = utils.GenerateToken(iUser.ID, iUser.Name)
 	}
-	return iUser, errResult
+	return iUser, token, errResult
 }
 
 func (m *UserService) AddUser(iUserAddDTO *dto.UserAddDTO) error {

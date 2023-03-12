@@ -3,11 +3,15 @@ package api
 import (
 	"fmt"
 	"gokyrie/conf"
+	"gokyrie/global"
 	"gokyrie/service"
 	"gokyrie/service/dto"
-	"gokyrie/utils"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
 type UserApi struct {
@@ -35,7 +39,10 @@ func (u UserApi) Login(c *gin.Context) {
 		return
 	}
 
-	iUser, err := u.Service.Login(iUserLoginDTO)
+	iUser, token, err := u.Service.Login(iUserLoginDTO)
+	if err == nil {
+		global.RedisClient.Set(strings.Replace(conf.LOGIN_USER_REDIS_KEY, "{ID}", strconv.Itoa(int(iUser.ID)), -1), token, viper.GetDuration("jwt.tokenExpire")*time.Minute)
+	}
 	if err != nil {
 		u.Fail(ResponseJson{
 			Msg:  err.Error(),
@@ -43,8 +50,6 @@ func (u UserApi) Login(c *gin.Context) {
 		})
 		return
 	}
-
-	token, _ := utils.GenerateToken(iUser.ID, iUser.Name)
 
 	u.OK(ResponseJson{
 		Msg:  "Login Success",

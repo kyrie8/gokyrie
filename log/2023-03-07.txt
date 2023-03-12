@@ -4,3 +4,4 @@
 {"level":"INFO","time":"2023-03-07 21:28:40","path":"router/router.go:86","msg":"stop server success"}
 {"level":"INFO","time":"2023-03-07 21:29:49","path":"router/router.go:86","msg":"stop server success"}
 {"level":"INFO","time":"2023-03-07 21:37:08","path":"router/router.go:86","msg":"stop server success"}
+{"level":"INFO","time":"2023-03-07 21:45:13","path":"router/router.go:86","msg":"stop server success"}
