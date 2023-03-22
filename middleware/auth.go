@@ -17,7 +17,7 @@ import (
 
 const (
 	TOKEN_NAME         = "Authorization"
-	TOKEN_PREFIX       = "Bearer: "
+	TOKEN_PREFIX       = "Bearer "
 	TOKEN_ERR_CODE     = 401
 	TOKEN_REFRESH_TIME = 10 * 60 * time.Second
 )

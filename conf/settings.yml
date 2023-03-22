@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+db:
+  dsn: root:123456@tcp(0.0.0.0:8090)/gokyrie?charset=utf8mb4&parseTime=True&loc=Local
+  maxIdleConns: 10 #最大空闲连接数
+  maxOpenConns: 10 #最大打开连接数
+
+redis:
+  url: 0.0.0.0:6379
+  password: 123456
+
+jwt:
+  tokenExpire: 30 #token有效时间（分钟）
+  key: "gokyrie...." #token签名密钥
+
+model:
+  develop: true
+
+log:
+  MaxSize: 1 #超过1m分割
+  MaxBackups: 10 #保留最大个数
+  MaxAge: 30 # 保留最大天数
