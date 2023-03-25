@@ -40,6 +40,7 @@ func (m *UserDao) CheckUserNameExist(stUserName string) bool {
 
 func (m *UserDao) AddUser(iUserAddDTO *dto.UserAddDTO) error {
 	var iUser model.User
+	// iUserAddDTO.RoleId
 	iUserAddDTO.ConvertToModel(&iUser)
 	err := m.Orm.Save(&iUser).Error
 	if err == nil {

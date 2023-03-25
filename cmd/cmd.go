@@ -34,6 +34,7 @@ func Start() {
 	}
 	//初始化路由
 	router.InitRouter()
+	//db.AutoMigrate(&model.Dept{}, &model.User{}, &model.Role{}, &model.Menu{})
 }
 
 func Clean() {}
