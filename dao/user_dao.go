@@ -22,7 +22,7 @@ func NewUserDao() *UserDao {
 
 func (m *UserDao) GetUserByName(userName string) (model.User, error) {
 	var iUser model.User
-	err := m.Orm.Model(&iUser).Where("name=?", userName).Find(&iUser).Error
+	err := m.Orm.Model(&model.User{}).Where("name=?", userName).Find(&iUser).Error
 	return iUser, err
 }
 
@@ -42,12 +42,12 @@ func (m *UserDao) AddUser(iUserAddDTO *dto.UserAddDTO) error {
 	var iUser model.User
 	// iUserAddDTO.RoleId
 	iUserAddDTO.ConvertToModel(&iUser)
-	err := m.Orm.Save(&iUser).Error
-	if err == nil {
+	res := m.Orm.Create(&iUser)
+	if res.Error == nil {
 		iUserAddDTO.ID = iUser.ID
 		iUserAddDTO.Password = ""
 	}
-	return err
+	return res.Error
 }
 
 func (m *UserDao) GetUserById(id uint) (model.User, error) {
@@ -67,6 +67,7 @@ func (m *UserDao) UpdateUser(iUserUpdateDTO *dto.UserUpdateDTO) error {
 	var iUser model.User
 	m.Orm.First(&iUser, iUserUpdateDTO.ID)
 	iUserUpdateDTO.ConvertToModel(&iUser)
+	//需判断role_id，查找role表
 	return m.Orm.Save(&iUser).Error
 }
 

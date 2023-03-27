@@ -45,7 +45,7 @@ func InitRouter() {
 	r.Use(middleware.Cors())
 	rgPublic := r.Group("/api/v1/public")
 	rgAuth := r.Group("/api/v1")
-	rgAuth.Use(middleware.Auth())
+	//rgAuth.Use(middleware.Auth())
 
 	registerCustomValidation()
 
@@ -90,6 +90,7 @@ func InitRouter() {
 // 初始化路由
 func initBAsePlatformRoutes() {
 	InitUserRoutes()
+	InitMenuRouter()
 }
 
 // 自定义验证器

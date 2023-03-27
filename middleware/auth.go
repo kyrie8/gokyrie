@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"gokyrie/api"
 	"gokyrie/conf"
 	"gokyrie/global"
@@ -34,6 +35,7 @@ func Auth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		//no token
 		token := ctx.GetHeader(TOKEN_NAME)
+		fmt.Printf("token: %v\n", token)
 		if token == "" || !strings.HasPrefix(token, TOKEN_PREFIX) {
 			TokenErr(ctx)
 			return
@@ -47,7 +49,7 @@ func Auth() gin.HandlerFunc {
 			TokenErr(ctx)
 			return
 		}
-
+		fmt.Printf("token: %v\n", token)
 		// token no equal
 		stUserId := strconv.Itoa(int(userId))
 		redisTokenKey := strings.Replace(conf.LOGIN_USER_REDIS_KEY, "{ID}", stUserId, -1)

@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"gokyrie/dao"
 	"gokyrie/model"
 	"gokyrie/service/dto"
@@ -31,7 +32,13 @@ func (m *UserService) Login(iUserDTO dto.UserLoginDTO) (model.User, string, erro
 	// if iUser.ID == 0 {
 	// 	errResult = errors.New("账号或者密码错误")
 	// }
+	fmt.Printf("iUserDTO: %v\n", iUserDTO.Name)
 	iUser, err := m.Dao.GetUserByName(iUserDTO.Name)
+	fmt.Printf("iUser: %#v\n", iUser)
+	if len(iUser.Name) == 0 {
+		errResult = errors.New("用户不存在")
+		return iUser, token, errResult
+	}
 	if err != nil || utils.CompareHashAndPassword(iUser.Password, iUserDTO.Password) {
 		errResult = errors.New("账号或者密码错误")
 	} else {

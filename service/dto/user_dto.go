@@ -17,8 +17,8 @@ type UserAddDTO struct {
 	Avatar   string `json:"avatar" form:"avatar"`
 	Mobile   string `json:"mobile" form:"mobile" binding:"omitempty,mobile" message:"手机号不正确"`
 	Email    string `json:"email" form:"email" binding:"omitempty,email" message:"邮箱不正确"`
-	DeptId   uint   `json:"dept_id" form:"dept_id"`
-	RoleId   uint   `json:"role_id" form:"role_id"`
+	DeptId   uint   `json:"dept_id" form:"dept_id" binding:"omitempty"`
+	RoleId   []uint `json:"role_id" form:"role_id" binding:"omitempty"`
 	Password string `json:"password,omitempty" form:"password" binding:"required" message:"密码不能为空"`
 }
 
@@ -30,7 +30,9 @@ func (m *UserAddDTO) ConvertToModel(iUser *model.User) {
 	iUser.RealName = m.RealName
 	iUser.Mobile = m.Mobile
 	iUser.Avatar = m.Avatar
-	iUser.DeptId = m.DeptId
+	if m.DeptId > 0 {
+		iUser.DeptId = m.DeptId
+	}
 }
 
 type UserUpdateDTO struct {
@@ -39,7 +41,7 @@ type UserUpdateDTO struct {
 	RealName string `json:"realName" form:"realName"`
 	Mobile   string `json:"mobile" form:"mobile" binding:"omitempty,mobile" message:"手机号不正确"`
 	Email    string `json:"email" form:"email" binding:"omitempty,email" message:"邮箱不正确"`
-	RoleId   uint   `json:"role_id" form:"role_id"` //暂时允许角色为空
+	RoleId   []uint `json:"role_id" form:"role_id"` //暂时允许角色为空
 	DeptId   uint   `json:"dept_id" form:"dept_id"`
 }
 
@@ -49,6 +51,9 @@ func (m *UserUpdateDTO) ConvertToModel(iUser *model.User) {
 	iUser.RealName = m.RealName
 	iUser.Mobile = m.Mobile
 	iUser.ID = m.ID
+	if m.DeptId > 0 {
+		iUser.DeptId = m.DeptId
+	}
 }
 
 type UserListDTO struct {

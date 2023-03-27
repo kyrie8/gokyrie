@@ -11,8 +11,9 @@ type User struct {
 	Mobile   string `json:"mobile" gorm:"size:11"`
 	Email    string `json:"email" gorm:"size:128"`
 	Password string `json:"-" gorm:"size:128;not null"`
-	Roles    []Role `gorm:"many2many:user_role;"`
-	DeptId   uint   `json:"deptId"`
+	Roles    []Role `json:"roles" gorm:"many2many:user_role;"`
+	DeptId   uint   `json:"-" gorm:"default: null"`
+	Dept     string `json:"dept" gorm:"-:all"`
 	gorm.Model
 }
 
