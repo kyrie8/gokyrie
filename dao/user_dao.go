@@ -59,7 +59,13 @@ func (m *UserDao) GetUserById(id uint) (model.User, error) {
 func (m *UserDao) GetUserList(iUserListDto *dto.UserListDTO) ([]model.User, int64, error) {
 	var giUserList []model.User
 	var nTotal int64
-	err := m.Orm.Model(&model.User{}).Scopes(Paginate(iUserListDto.Paginate)).Find(&giUserList).Offset(-1).Limit(-1).Count(&nTotal).Error
+	Db := m.Orm
+	Db = Db.Joins("Dept")
+	if iUserListDto.Name != "" {
+		Db = Db.Where("name = ?", iUserListDto.Name)
+	}
+	Db = Db.Scopes(Paginate(iUserListDto.Paginate)).Find(&giUserList).Offset(-1).Limit(-1).Count(&nTotal)
+	err := Db.Error
 	return giUserList, nTotal, err
 }
 
