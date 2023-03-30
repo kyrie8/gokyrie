@@ -37,3 +37,22 @@ func (m MenuApi) AddMenu(c *gin.Context) {
 		Code: conf.SUCCESS_CODE,
 	})
 }
+
+func (m MenuApi) UpdateMenu(c *gin.Context) {
+	var iMenuUpdateDTO dto.MenuUpdateDto
+	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iMenuUpdateDTO, BindUri: true}).GetError(); err != nil {
+		return
+	}
+	err := m.Service.UpdateMenu(&iMenuUpdateDTO)
+	if err != nil {
+		m.ServerFail(ResponseJson{
+			Code: conf.FAIL_CODE,
+			Msg:  err.Error(),
+		})
+		return
+	}
+
+	m.OK(ResponseJson{
+		Code: conf.SUCCESS_CODE,
+	})
+}

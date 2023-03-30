@@ -28,3 +28,10 @@ func (m *MenuService) AddMenu(iMenuDto *dto.MenuAddDto) error {
 	}
 	return m.Dao.AddMenu(iMenuDto)
 }
+
+func (m *MenuService) UpdateMenu(iMenuDto *dto.MenuUpdateDto) error {
+	if iMenuDto.MenuId <= 0 {
+		return errors.New("Invalid Menu ID")
+	}
+	return m.Dao.UpdateMenu(iMenuDto)
+}

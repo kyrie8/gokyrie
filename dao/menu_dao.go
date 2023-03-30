@@ -35,3 +35,9 @@ func (m *MenuDao) CheckMenuNameExist(name string) bool {
 	m.Orm.Model(&model.Menu{}).Where("menuName = ?", name).Count(&noTotal)
 	return noTotal > 0
 }
+
+func (m *MenuDao) UpdateMenu(iMenuUpdateDto *dto.MenuUpdateDto) error {
+	var iMenu *model.Menu
+	iMenuUpdateDto.ConvertToModel(iMenu)
+	return m.Orm.Save(&iMenu).Error
+}

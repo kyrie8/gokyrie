@@ -25,3 +25,21 @@ func (m *MenuAddDto) ConvertToModel(iMenu *model.Menu) {
 	iMenu.MenuName = m.MenuName
 	iMenu.ParentId = &m.ParentId
 }
+
+type MenuUpdateDto struct {
+	MenuAddDto
+	MenuId uint `json:"menuId" form:"menuId" uri:"menuId"`
+}
+
+func (m *MenuUpdateDto) ConvertToModel(iMenu *model.Menu) {
+	iMenu.AuthKey = m.AuthKey
+	iMenu.Hidden = &m.Hidden
+	iMenu.IsOutLink = &m.IsOutLink
+	iMenu.Type = &m.Type
+	iMenu.Icon = m.Icon
+	iMenu.Component = m.Component
+	iMenu.Path = m.Path
+	iMenu.MenuName = m.MenuName
+	iMenu.ParentId = &m.ParentId
+	iMenu.MenuId = m.MenuId
+}
