@@ -39,5 +39,6 @@ func (m *MenuDao) CheckMenuNameExist(name string) bool {
 func (m *MenuDao) UpdateMenu(iMenuUpdateDto *dto.MenuUpdateDto) error {
 	var iMenu *model.Menu
 	iMenuUpdateDto.ConvertToModel(iMenu)
-	return m.Orm.Save(&iMenu).Error
+	return m.Orm.Model(iMenu).Select("*").Omit("CreatedAt").Updates(iMenuUpdateDto).Error
+	//return m.Orm.Save(&iMenu).Error
 }

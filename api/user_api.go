@@ -38,7 +38,7 @@ func (u UserApi) Login(c *gin.Context) {
 	if err := u.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iUserLoginDTO}).GetError(); err != nil {
 		return
 	}
-
+	fmt.Printf("iUserLoginDTO: %v#\n", iUserLoginDTO)
 	iUser, token, err := u.Service.Login(iUserLoginDTO)
 	if err == nil {
 		global.RedisClient.Set(strings.Replace(conf.LOGIN_USER_REDIS_KEY, "{ID}", strconv.Itoa(int(iUser.ID)), -1), token, viper.GetDuration("jwt.tokenExpire")*time.Minute)
@@ -135,7 +135,7 @@ func (m UserApi) GetUserList(c *gin.Context) {
 
 func (m UserApi) UpdateUser(c *gin.Context) {
 	var iUserUpdateDTO dto.UserUpdateDTO
-	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iUserUpdateDTO, BindUri: true}).GetError(); err != nil {
+	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iUserUpdateDTO, BindAll: true}).GetError(); err != nil {
 		return
 	}
 	err := m.Service.UpdateUser(&iUserUpdateDTO)

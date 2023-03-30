@@ -40,7 +40,7 @@ func (m MenuApi) AddMenu(c *gin.Context) {
 
 func (m MenuApi) UpdateMenu(c *gin.Context) {
 	var iMenuUpdateDTO dto.MenuUpdateDto
-	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iMenuUpdateDTO, BindUri: true}).GetError(); err != nil {
+	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iMenuUpdateDTO, BindAll: true}).GetError(); err != nil {
 		return
 	}
 	err := m.Service.UpdateMenu(&iMenuUpdateDTO)

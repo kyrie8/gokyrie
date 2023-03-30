@@ -33,12 +33,15 @@ type BuildRequestOption struct {
 func (m *BaseApi) BuildRequest(option BuildRequestOption) *BaseApi {
 	var errResult error
 	m.Ctx = option.Ctx
+
 	if option.DTO != nil {
 		if option.BindAll || option.BindUri {
-			errResult = utils.AppendError(errResult, m.Ctx.ShouldBindUri(option.DTO))
+			err := m.Ctx.ShouldBindUri(option.DTO)
+			errResult = utils.AppendError(errResult, err)
 		}
 		if option.BindAll || !option.BindUri {
-			errResult = utils.AppendError(errResult, m.Ctx.ShouldBind(option.DTO))
+			err := m.Ctx.ShouldBind(option.DTO)
+			errResult = utils.AppendError(errResult, err)
 		}
 		if errResult != nil {
 			errResult = m.ParseValidateErrors(errResult, option.DTO)

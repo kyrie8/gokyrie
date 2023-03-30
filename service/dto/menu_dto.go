@@ -4,7 +4,7 @@ import "gokyrie/model"
 
 type MenuAddDto struct {
 	ParentId  uint   `json:"parentId" form:"parentId"`
-	MenuName  string `json:"menuName" form:"MenuName" binding:"required" message:"菜单名不能为空"`
+	MenuName  string `json:"menuName" form:"menuName" binding:"required" message:"菜单名不能为空"`
 	Path      string `json:"path" form:"path" binding:"required" message:"路径不能为空"`
 	Component string `json:"component" form:"component" binding:"required" message:"组件不能为空"`
 	Icon      string `json:"icon" form:"icon"`
@@ -27,8 +27,16 @@ func (m *MenuAddDto) ConvertToModel(iMenu *model.Menu) {
 }
 
 type MenuUpdateDto struct {
-	MenuAddDto
-	MenuId uint `json:"menuId" form:"menuId" uri:"menuId"`
+	ParentId  uint   `json:"parentId" form:"parentId"`
+	MenuName  string `json:"menuName" form:"menuName" binding:"required" message:"菜单名不能为空"`
+	Path      string `json:"path" form:"path" binding:"required" message:"路径不能为空"`
+	Component string `json:"component" form:"component" binding:"required" message:"组件不能为空"`
+	Icon      string `json:"icon" form:"icon"`
+	Type      uint   `json:"type" form:"type"`
+	IsOutLink uint   `json:"isOutLink" form:"isOutLink"`
+	Hidden    uint   `json:"hidden" form:"hidden"`
+	AuthKey   string `json:"authKey" form:"authKey"`
+	MenuId    uint   `json:"menuId" form:"menuId" uri:"menuId"`
 }
 
 func (m *MenuUpdateDto) ConvertToModel(iMenu *model.Menu) {
