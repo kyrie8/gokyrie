@@ -32,26 +32,33 @@ type BuildRequestOption struct {
 
 func (m *BaseApi) BuildRequest(option BuildRequestOption) *BaseApi {
 	var errResult error
+	var errUriResult error
 	m.Ctx = option.Ctx
 
 	if option.UriDTO != nil {
 		err := m.Ctx.ShouldBindUri(option.UriDTO)
-		errResult = utils.AppendError(errResult, err)
+		errUriResult = utils.AppendError(errUriResult, err)
+		if errUriResult != nil {
+			m.DealError(errUriResult, option.UriDTO)
+		}
 	}
 	if option.DTO != nil {
 		err := m.Ctx.ShouldBind(option.DTO)
 		errResult = utils.AppendError(errResult, err)
-	}
-	if errResult != nil {
-		errResult = m.ParseValidateErrors(errResult, option.DTO)
-		m.AddError(errResult)
-		m.Fail(ResponseJson{
-			Msg: m.GetError().Error(),
-		})
+		if errResult != nil {
+			m.DealError(errResult, option.DTO)
+		}
 	}
 	return m
 }
 
+func (m *BaseApi) DealError(res error, dto interface{}) {
+	err := m.ParseValidateErrors(res, dto)
+	m.AddError(err)
+	m.Fail(ResponseJson{
+		Msg: m.GetError().Error(),
+	})
+}
 func (m *BaseApi) AddError(err error) {
 	m.Errors = utils.AppendError(m.Errors, err)
 }

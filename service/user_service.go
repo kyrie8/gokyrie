@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"gokyrie/dao"
 	"gokyrie/model"
 	"gokyrie/service/dto"
@@ -32,9 +31,7 @@ func (m *UserService) Login(iUserDTO dto.UserLoginDTO) (model.User, string, erro
 	// if iUser.ID == 0 {
 	// 	errResult = errors.New("账号或者密码错误")
 	// }
-	fmt.Printf("iUserDTO: %v\n", iUserDTO.Name)
 	iUser, err := m.Dao.GetUserByName(iUserDTO.Name)
-	fmt.Printf("iUser: %#v\n", iUser)
 	if len(iUser.Name) == 0 {
 		errResult = errors.New("用户不存在")
 		return iUser, token, errResult
@@ -49,7 +46,7 @@ func (m *UserService) Login(iUserDTO dto.UserLoginDTO) (model.User, string, erro
 
 func (m *UserService) AddUser(iUserAddDTO *dto.UserAddDTO) error {
 	if m.Dao.CheckUserNameExist(iUserAddDTO.Name) {
-		return errors.New("UserName Exist")
+		return errors.New("userName Exist")
 	}
 	return m.Dao.AddUser(iUserAddDTO)
 }
@@ -64,7 +61,7 @@ func (m *UserService) GetUserList(iUserListDto *dto.UserListDTO) ([]model.User, 
 
 func (m *UserService) UpdateUser(iUserUpdateDTO *dto.UserUpdateDTO) error {
 	if iUserUpdateDTO.ID == 0 {
-		return errors.New("Invalid User ID")
+		return errors.New("invalid User ID")
 	}
 	return m.Dao.UpdateUser(iUserUpdateDTO)
 }

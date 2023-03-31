@@ -8,7 +8,3 @@ type Dept struct {
 	Users    []User `json:"users,omitempty" gorm:"foreignKey:DeptId"`
 	Common
 }
-
-func (Dept) tableName() string {
-	return "t_dept"
-}
