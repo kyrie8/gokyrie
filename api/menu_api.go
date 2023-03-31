@@ -40,9 +40,11 @@ func (m MenuApi) AddMenu(c *gin.Context) {
 
 func (m MenuApi) UpdateMenu(c *gin.Context) {
 	var iMenuUpdateDTO dto.MenuUpdateDto
-	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iMenuUpdateDTO, BindAll: true}).GetError(); err != nil {
+	var iCommonIDDTO dto.CommonIDDTO
+	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iMenuUpdateDTO, UriDTO: &iCommonIDDTO}).GetError(); err != nil {
 		return
 	}
+	iMenuUpdateDTO.MenuId = iCommonIDDTO.ID
 	err := m.Service.UpdateMenu(&iMenuUpdateDTO)
 	if err != nil {
 		m.ServerFail(ResponseJson{

@@ -12,3 +12,4 @@
 {"level":"INFO","time":"2023-03-28 20:33:22","path":"router/router.go:87","msg":"stop server success"}
 {"level":"INFO","time":"2023-03-28 20:38:26","path":"router/router.go:87","msg":"stop server success"}
 {"level":"INFO","time":"2023-03-30 19:34:04","path":"router/router.go:87","msg":"stop server success"}
+{"level":"INFO","time":"2023-03-30 23:18:28","path":"router/router.go:87","msg":"stop server success"}

@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	"gokyrie/global"
 	"gokyrie/utils"
 	"reflect"
@@ -24,32 +25,29 @@ func NewBaseApi() BaseApi {
 }
 
 type BuildRequestOption struct {
-	Ctx     *gin.Context
-	DTO     interface{}
-	BindUri bool
-	BindAll bool
+	Ctx    *gin.Context
+	DTO    interface{}
+	UriDTO interface{}
 }
 
 func (m *BaseApi) BuildRequest(option BuildRequestOption) *BaseApi {
 	var errResult error
 	m.Ctx = option.Ctx
 
+	if option.UriDTO != nil {
+		err := m.Ctx.ShouldBindUri(option.UriDTO)
+		errResult = utils.AppendError(errResult, err)
+	}
 	if option.DTO != nil {
-		if option.BindAll || option.BindUri {
-			err := m.Ctx.ShouldBindUri(option.DTO)
-			errResult = utils.AppendError(errResult, err)
-		}
-		if option.BindAll || !option.BindUri {
-			err := m.Ctx.ShouldBind(option.DTO)
-			errResult = utils.AppendError(errResult, err)
-		}
-		if errResult != nil {
-			errResult = m.ParseValidateErrors(errResult, option.DTO)
-			m.AddError(errResult)
-			m.Fail(ResponseJson{
-				Msg: m.GetError().Error(),
-			})
-		}
+		err := m.Ctx.ShouldBind(option.DTO)
+		errResult = utils.AppendError(errResult, err)
+	}
+	if errResult != nil {
+		errResult = m.ParseValidateErrors(errResult, option.DTO)
+		m.AddError(errResult)
+		m.Fail(ResponseJson{
+			Msg: m.GetError().Error(),
+		})
 	}
 	return m
 }
@@ -98,6 +96,7 @@ func (m *BaseApi) ParseValidateErrors(err error, target any) error {
 	for _, fieldErr := range validatorErr {
 		field, _ := fields.FieldByName(fieldErr.Field())
 		errTag := fieldErr.Tag() + "_err"
+		fmt.Printf("%v", fieldErr.Tag())
 		errMsg := field.Tag.Get(errTag)
 		if errMsg == "" {
 			errMsg = field.Tag.Get("message")

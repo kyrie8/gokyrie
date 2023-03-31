@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"gokyrie/dao"
 	"gokyrie/service/dto"
 )
@@ -31,7 +32,8 @@ func (m *MenuService) AddMenu(iMenuDto *dto.MenuAddDto) error {
 
 func (m *MenuService) UpdateMenu(iMenuDto *dto.MenuUpdateDto) error {
 	if iMenuDto.MenuId <= 0 {
-		return errors.New("Invalid Menu ID")
+		return errors.New(fmt.Sprint("Invalid Menu ID"))
 	}
+	fmt.Printf("iMenuDto: %#v\n", iMenuDto)
 	return m.Dao.UpdateMenu(iMenuDto)
 }
