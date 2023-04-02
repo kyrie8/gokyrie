@@ -37,10 +37,21 @@ func (m *DeptService) UpdateDept(iDeptDto *dto.DeptUpdateDTO) error {
 	return m.Dao.UpdateDept(iDeptDto)
 }
 
-func (m *DeptService) GetDeptList(iDeptListDto *dto.DeptUserListDTO) ([]model.Dept, int64, error) {
+func (m *DeptService) GetDeptList(iDeptListDto *dto.DeptListDTO) ([]model.Dept, int64, error) {
 	return m.Dao.GetDeptList(iDeptListDto)
 }
 
 func (m *DeptService) DeleteDeptById(iCommonIDDTO *dto.CommonIDDTO) error {
 	return m.Dao.DeleteDeptById(iCommonIDDTO.ID)
+}
+
+func (m *DeptService) GetDeptTree(array []model.Dept, pid uint) []model.Dept {
+	var res []model.Dept
+	for _, v := range array {
+		if v.ParentId == pid {
+			v.Children = m.GetDeptTree(array, v.DeptId)
+			res = append(res, v)
+		}
+	}
+	return res
 }

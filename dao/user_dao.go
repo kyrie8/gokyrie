@@ -52,7 +52,7 @@ func (m *UserDao) AddUser(iUserAddDTO *dto.UserAddDTO) error {
 
 func (m *UserDao) GetUserById(id uint) (model.User, error) {
 	var iUser model.User
-	err := m.Orm.First(&iUser, id).Error
+	err := m.Orm.Joins("Dept").First(&iUser, id).Error
 	return iUser, err
 }
 
@@ -60,12 +60,12 @@ func (m *UserDao) GetUserList(iUserListDto *dto.UserListDTO) ([]model.User, int6
 	var giUserList []model.User
 	var nTotal int64
 	Db := m.Orm
-	// Db = Db.Joins("Dept") //一对多 带出 dept
+	Db = Db.Joins("Dept") //一对多 带出 dept
 	if iUserListDto.Name != "" {
 		Db = Db.Where("name = ?", iUserListDto.Name)
 	}
 	if iUserListDto.DeptId > 0 {
-		Db = Db.Where("dept_id = ?", iUserListDto.DeptId)
+		Db = Db.Where(&model.User{DeptId: iUserListDto.DeptId})
 	}
 	Db = Db.Scopes(Paginate(iUserListDto.Paginate)).Find(&giUserList).Offset(-1).Limit(-1).Count(&nTotal)
 	err := Db.Error

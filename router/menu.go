@@ -13,6 +13,7 @@ func InitMenuRouter() {
 		{
 			rgAuthMenu.POST("", menuApi.AddMenu)
 			rgAuthMenu.PUT("/:id", menuApi.UpdateMenu)
+			rgAuthMenu.GET("/list", menuApi.GetMenuList)
 		}
 	})
 }

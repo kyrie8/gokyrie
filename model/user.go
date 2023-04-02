@@ -13,7 +13,7 @@ type User struct {
 	Password string `json:"-" gorm:"size:128;not null"`
 	Roles    []Role `json:"roles,omitempty" gorm:"many2many:user_role;"`
 	Dept     Dept   `json:"dept,omitempty"`
-	DeptId   uint   `json:"-" gorm:"default: null"`
+	DeptId   uint   `json:"deptId" gorm:"default: null"`
 	gorm.Model
 }
 

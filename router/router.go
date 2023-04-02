@@ -91,6 +91,8 @@ func InitRouter() {
 func initBAsePlatformRoutes() {
 	InitUserRoutes()
 	InitMenuRouter()
+	InitDeptRouter()
+	InitRoleRouter()
 }
 
 // 自定义验证器

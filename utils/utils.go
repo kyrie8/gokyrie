@@ -8,3 +8,7 @@ func AppendError(existErr, newErr error) error {
 	}
 	return fmt.Errorf("%v, %w", existErr, newErr)
 }
+
+func ToTree(item []interface{}) []interface{} {
+	return nil
+}

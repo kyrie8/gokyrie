@@ -21,7 +21,9 @@ func NewDeptDao() *DeptDao {
 }
 
 func (m *DeptDao) AddDept(iDeptDto *dto.DeptAddDTO) error {
-	return m.Orm.Create(iDeptDto).Error
+	var iDept model.Dept
+	iDeptDto.ConvertToModel(&iDept)
+	return m.Orm.Create(&iDept).Error
 }
 
 func (m *DeptDao) CheckDeptNameExist(name string) bool {
@@ -41,7 +43,7 @@ func (m *DeptDao) GetDeptByName(name string) (model.Dept, error) {
 	return dept, err
 }
 
-func (m *DeptDao) GetDeptList(dto *dto.DeptUserListDTO) ([]model.Dept, int64, error) {
+func (m *DeptDao) GetDeptList(dto *dto.DeptListDTO) ([]model.Dept, int64, error) {
 	var nTotal int64
 	var iDept []model.Dept
 	Db := m.Orm
@@ -52,13 +54,17 @@ func (m *DeptDao) GetDeptList(dto *dto.DeptUserListDTO) ([]model.Dept, int64, er
 	return iDept, nTotal, err
 }
 
-func (m *DeptDao) GetUserByDept(dto *dto.DeptUserListDTO) (model.Dept, int64, error) {
+func (m *DeptDao) GetUserByDept(dto *dto.DeptListDTO) (model.Dept, int64, error) {
 	var nTotal int64
 	var iDept model.Dept
-	err := m.Orm.Preload("User").Where("dept_name = ?", dto.Name).Scopes(Paginate(dto.Paginate)).Find(&iDept).Offset(-1).Limit(-1).Count(&nTotal).Error
+	err := m.Orm.Preload("Users").Where("dept_name = ?", dto.Name).Scopes(Paginate(dto.Paginate)).Find(&iDept).Offset(-1).Limit(-1).Count(&nTotal).Error
 	return iDept, nTotal, err
 }
 
 func (m *DeptDao) DeleteDeptById(id uint) error {
-	return m.Orm.Select("User").Delete(&model.Dept{}, id).Error
+	err := m.Orm.Model(&model.User{}).Where("dept_id =?", id).Updates(model.User{DeptId: 0}).Error
+	if err != nil {
+		return err
+	}
+	return m.Orm.Where("dept_id =?", id).Delete(&model.Dept{}).Error
 }

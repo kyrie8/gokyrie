@@ -12,5 +12,6 @@ type Menu struct {
 	Hidden    uint   `json:"hidden" gorm:"default:0;comment:'0不隐藏,1隐藏'"`
 	AuthKey   string `json:"authKey" gorm:"not null;comment:'权限标识:如user:add'"`
 	Roles     []Role `json:"roles,omitempty" gorm:"many2many:role_menu;foreignKey:MenuId;joinForeignKey:MenuId;references:RoleId;joinReferences:RoleId"`
+	Children  []Menu `json:"children" gorm:"-"`
 	Common
 }

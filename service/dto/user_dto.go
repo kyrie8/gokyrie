@@ -59,5 +59,5 @@ func (m *UserUpdateDTO) ConvertToModel(iUser *model.User) {
 type UserListDTO struct {
 	Paginate
 	Name   string `json:"name" form:"name"`
-	DeptId uint   `json:"deptId" form:"deptId"`
+	DeptId uint   `json:"deptId,omitempty" form:"deptId"`
 }

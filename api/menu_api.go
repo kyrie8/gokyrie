@@ -58,3 +58,24 @@ func (m MenuApi) UpdateMenu(c *gin.Context) {
 		Code: conf.SUCCESS_CODE,
 	})
 }
+
+func (m MenuApi) GetMenuList(c *gin.Context) {
+	var iMenuListDTO dto.MenuListDto
+	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iMenuListDTO}).GetError(); err != nil {
+		return
+	}
+	iMenu, total, err := m.Service.GetMenuList(&iMenuListDTO)
+	if err != nil {
+		m.ServerFail(ResponseJson{
+			Code: conf.FAIL_CODE,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	iMenu = m.Service.GetMenuTree(iMenu, 0)
+	m.OK(ResponseJson{
+		Code:  conf.SUCCESS_CODE,
+		Data:  iMenu,
+		Total: total,
+	})
+}

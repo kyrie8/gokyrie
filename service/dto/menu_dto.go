@@ -51,3 +51,8 @@ func (m *MenuUpdateDto) ConvertToModel(iMenu *model.Menu) {
 	iMenu.ParentId = m.ParentId
 	iMenu.MenuId = m.MenuId
 }
+
+type MenuListDto struct {
+	Paginate
+	Name string `json:"name" form:"name"`
+}

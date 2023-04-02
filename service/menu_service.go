@@ -3,11 +3,12 @@ package service
 import (
 	"errors"
 	"gokyrie/dao"
+	"gokyrie/model"
 	"gokyrie/service/dto"
 )
 
 type MenuService struct {
-	BaseService,
+	BaseService
 	Dao *dao.MenuDao
 }
 
@@ -34,4 +35,19 @@ func (m *MenuService) UpdateMenu(iMenuDto *dto.MenuUpdateDto) error {
 		return errors.New("invalid menuId")
 	}
 	return m.Dao.UpdateMenu(iMenuDto)
+}
+
+func (m *MenuService) GetMenuList(iMenuListDto *dto.MenuListDto) ([]model.Menu, int64, error) {
+	return m.Dao.GetMenuList(iMenuListDto)
+}
+
+func (m *MenuService) GetMenuTree(array []model.Menu, pid uint) []model.Menu {
+	var res []model.Menu
+	for _, v := range array {
+		if v.ParentId == pid {
+			v.Children = m.GetMenuTree(array, v.MenuId)
+			res = append(res, v)
+		}
+	}
+	return res
 }
