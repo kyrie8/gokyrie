@@ -14,6 +14,8 @@ func InitRoleRouter() {
 			rgAuthMenu.POST("", roleApi.AddRole)
 			rgAuthMenu.PUT("/:id", roleApi.UpdateRole)
 			rgAuthMenu.GET("/list", roleApi.GetRoleList)
+			rgAuthMenu.PUT("/roleMenu/:id", roleApi.UpdateRoleMenu)
+			rgAuthMenu.GET("/roleMenu/:id", roleApi.GetMenuByRoleId)
 		}
 	})
 }

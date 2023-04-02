@@ -1,6 +1,8 @@
 package dto
 
-import "gokyrie/model"
+import (
+	"gokyrie/model"
+)
 
 type RoleAddDto struct {
 	RoleName string `json:"roleName" form:"roleName"`
@@ -20,4 +22,9 @@ type RoleListDto struct {
 type RoleUpdateDto struct {
 	RoleAddDto
 	RoleId uint `json:"roleId" form:"roleId"`
+}
+
+type RoleMenuDto struct {
+	RoleId uint  `json:"roleId" form:"roleId"`
+	MenuId []int `json:"menuId" form:"menuId"`
 }

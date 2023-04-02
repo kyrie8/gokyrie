@@ -78,3 +78,46 @@ func (m RoleApi) GetRoleList(c *gin.Context) {
 		Total: total,
 	})
 }
+
+func (m RoleApi) UpdateRoleMenu(c *gin.Context) {
+	var iRoleMenuDTO dto.RoleMenuDto
+	var iCommonIDDTO dto.CommonIDDTO
+	if err := m.BuildRequest(BuildRequestOption{Ctx: c, DTO: &iRoleMenuDTO, UriDTO: &iCommonIDDTO}).GetError(); err != nil {
+		return
+	}
+	iRoleMenuDTO.RoleId = iCommonIDDTO.ID
+	err := m.Service.RoleMenu(&iRoleMenuDTO)
+	if err != nil {
+		m.ServerFail(ResponseJson{
+			Code: conf.FAIL_CODE,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	m.OK(ResponseJson{
+		Code: conf.SUCCESS_CODE,
+	})
+}
+
+func (m RoleApi) GetMenuByRoleId(c *gin.Context) {
+	var iCommonIDDTO dto.CommonIDDTO
+	var menuId []uint
+	if err := m.BuildRequest(BuildRequestOption{Ctx: c, UriDTO: &iCommonIDDTO}).GetError(); err != nil {
+		return
+	}
+	iRole, err := m.Service.GetMenusByRoleId(&iCommonIDDTO)
+	if err != nil {
+		m.ServerFail(ResponseJson{
+			Code: conf.FAIL_CODE,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	for _, v := range iRole.Menus {
+		menuId = append(menuId, v.MenuId)
+	}
+	m.OK(ResponseJson{
+		Code: conf.SUCCESS_CODE,
+		Data: menuId,
+	})
+}
