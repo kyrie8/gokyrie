@@ -41,8 +41,8 @@ type UserUpdateDTO struct {
 	RealName string `json:"realName" form:"realName"`
 	Mobile   string `json:"mobile" form:"mobile" binding:"omitempty,mobile" message:"手机号不正确"`
 	Email    string `json:"email" form:"email" binding:"omitempty,email" message:"邮箱不正确"`
-	// RoleId   []uint `json:"role_id" form:"role_id"` //暂时允许角色为空
-	DeptId uint `json:"deptId,omitempty" form:"deptId"`
+	RoleId   []uint `json:"roleId" form:"roleId"`
+	DeptId   uint   `json:"deptId,omitempty" form:"deptId"`
 }
 
 func (m *UserUpdateDTO) ConvertToModel(iUser *model.User) {

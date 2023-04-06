@@ -42,12 +42,26 @@ func (m *UserDao) AddUser(iUserAddDTO *dto.UserAddDTO) error {
 	var iUser model.User
 	// iUserAddDTO.RoleId
 	iUserAddDTO.ConvertToModel(&iUser)
-	res := m.Orm.Create(&iUser)
-	if res.Error == nil {
-		iUserAddDTO.ID = iUser.ID
-		iUserAddDTO.Password = ""
+	tx := m.Orm.Begin()
+	if err := tx.Create(&iUser).Error; err != nil {
+		tx.Rollback()
+		return err
 	}
-	return res.Error
+	iUserAddDTO.ID = iUser.ID
+	iUserAddDTO.Password = ""
+	if len(iUserAddDTO.RoleId) > 0 { // 需要加入事务防止用户创建成功，但没有和角色建立关系
+		var roles []model.Role
+		for _, v := range iUserAddDTO.RoleId {
+			roles = append(roles, model.Role{
+				RoleId: uint(v),
+			})
+		}
+		err := tx.Model(&iUser).Association("Roles").Append(&roles)
+		if err != nil {
+			return err
+		}
+	}
+	return tx.Commit().Error
 }
 
 func (m *UserDao) GetUserById(id uint) (model.User, error) {
@@ -74,10 +88,40 @@ func (m *UserDao) GetUserList(iUserListDto *dto.UserListDTO) ([]model.User, int6
 
 func (m *UserDao) UpdateUser(iUserUpdateDTO *dto.UserUpdateDTO) error {
 	var iUser model.User
-	m.Orm.First(&iUser, iUserUpdateDTO.ID)
+	var roles []model.Role
+	iUser.ID = iUserUpdateDTO.ID
+	tx := m.Orm.Begin()
+	if len(iUserUpdateDTO.RoleId) == 0 {
+		err := tx.Model(&iUser).Association("Roles").Clear()
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+	} else {
+		for _, v := range iUserUpdateDTO.RoleId {
+			roles = append(roles, model.Role{
+				RoleId: uint(v),
+			})
+		}
+		err := tx.Model(&iUser).Association("Roles").Replace(&roles)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+	tx.First(&iUser, iUserUpdateDTO.ID)
 	iUserUpdateDTO.ConvertToModel(&iUser)
-	//需判断role_id，查找role表
-	return m.Orm.Save(&iUser).Error
+	var err error
+	if iUserUpdateDTO.DeptId > 0 {
+		err = tx.Save(&iUser).Error
+	} else {
+		err = tx.Omit("dept_id").Updates(&iUser).Error
+	}
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	return tx.Commit().Error
 }
 
 func (m *UserDao) DeleteUserById(id uint) error {

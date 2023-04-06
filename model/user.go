@@ -11,9 +11,9 @@ type User struct {
 	Mobile   string `json:"mobile" gorm:"size:11"`
 	Email    string `json:"email" gorm:"size:128"`
 	Password string `json:"-" gorm:"size:128;not null"`
-	Roles    []Role `json:"roles,omitempty" gorm:"many2many:user_role;"`
+	Roles    []Role `json:"roles,omitempty" gorm:"many2many:user_role;foreignKey:id;joinForeignKey:UserId;references:RoleId;joinReferences:RoleId"`
 	Dept     Dept   `json:"dept,omitempty"`
-	DeptId   uint   `json:"deptId" gorm:"default: null"`
+	DeptId   uint   `json:"deptId,omitempty" gorm:"default: null"`
 	gorm.Model
 }
 
